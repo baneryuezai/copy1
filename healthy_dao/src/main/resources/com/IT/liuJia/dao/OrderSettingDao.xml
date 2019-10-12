@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.IT.liuJia.dao.OrderSettingDao">
+    <!--通过日期查询预约信息-->
+    <select id="findByOrderDate" parameterType="date" resultType="OrderSetting">
+        select * from t_ordersetting where orderdate=#{orderdate}
+    </select>
+    <!--更新可预约数量-->
+    <update id="updateNumber" parameterType="OrderSetting">
+        update t_ordersetting set number = #{number} where id=#{id}
+    </update>
+    <!--添加预约信息-->
+    <insert id="add" parameterType="OrderSetting">
+        insert into t_ordersetting (orderDate, number,reservations)
+        values(#{orderDate},#{number},#{reservations})
+    </insert>
+
+    <!--<select id="getOrderSettingBetweenDate" parameterType="String" resultType="OrderSetting">
+        select * From t_ordersetting where orderdate between #{startDate} and #{endDate}
+    </select>-->
+
+    <!--更新可预约人数-->
+    <update id="editNumberByOrderDate" parameterType="OrderSetting">
+        update t_ordersetting set number = #{number} where orderDate = #{orderDate}
+    </update>
+    <!--更新已预约人数-->
+    <update id="editReservationsByOrderDate" parameterType="OrderSetting">
+        update t_ordersetting set reservations = reservations+1 where orderDate = #{orderDate}
+    </update>
+    <!--按日期范围查询-->
+    <select id="getOrderSettingByMonth" parameterType="String" resultType="OrderSetting">
+       select * From t_ordersetting where orderdate between #{startDate} and #{endDate}
+    </select>
+</mapper>

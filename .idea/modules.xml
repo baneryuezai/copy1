@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/healthy_common/healthy_common.iml" filepath="$PROJECT_DIR$/healthy_common/healthy_common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/healthy_dao/healthy_dao.iml" filepath="$PROJECT_DIR$/healthy_dao/healthy_dao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/healthy_interface/healthy_interface.iml" filepath="$PROJECT_DIR$/healthy_interface/healthy_interface.iml" />
+      <module fileurl="file://$PROJECT_DIR$/healthy_job/healthy_job.iml" filepath="$PROJECT_DIR$/healthy_job/healthy_job.iml" />
+      <module fileurl="file://$PROJECT_DIR$/healthy_mobile/healthy_mobile.iml" filepath="$PROJECT_DIR$/healthy_mobile/healthy_mobile.iml" />
+      <module fileurl="file://$PROJECT_DIR$/healthy_parent.iml" filepath="$PROJECT_DIR$/healthy_parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/healthy_pojo/healthy_pojo.iml" filepath="$PROJECT_DIR$/healthy_pojo/healthy_pojo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/healthy_service/healthy_service.iml" filepath="$PROJECT_DIR$/healthy_service/healthy_service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/healthy_web/healthy_web.iml" filepath="$PROJECT_DIR$/healthy_web/healthy_web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/springsecurity_demo/springsecurity_demo.iml" filepath="$PROJECT_DIR$/springsecurity_demo/springsecurity_demo.iml" />
+    </modules>
+  </component>
+</project>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="healthy_common" />
+        <module name="healthy_dao" />
+        <module name="healthy_interface" />
+        <module name="healthy_job" />
+        <module name="healthy_mobile" />
+        <module name="healthy_pojo" />
+        <module name="healthy_service" />
+        <module name="healthy_web" />
+        <module name="springsecurity_demo" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="healthy_common" target="1.8" />
+      <module name="healthy_dao" target="1.8" />
+      <module name="healthy_interface" target="1.8" />
+      <module name="healthy_job" target="1.8" />
+      <module name="healthy_mobile" target="1.8" />
+      <module name="healthy_parent" target="1.8" />
+      <module name="healthy_pojo" target="1.8" />
+      <module name="healthy_service" target="1.8" />
+      <module name="healthy_web" target="1.8" />
+      <module name="springsecurity_demo" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	   http://www.springframework.org/schema/beans/spring-beans.xsd
+	   http://www.springframework.org/schema/security
+	   http://www.springframework.org/schema/security/spring-security.xsd
+	   http://www.springframework.org/schema/context
+	   http://www.springframework.org/schema/context/spring-context.xsd">
+    <!--注意：
+        所有的url都必须以/打头，否则启动报错
+    -->
+
+    <!--静态资源过滤
+        用户无须登陆即可访问
+        pattern: 指定url页面
+        security: none匿名访问
+
+        /*    这个目录下所有的文件
+              /aa.js
+        /**   这个目录下及其子目录下的所有文件
+               /a/a/b/c/s/a
+    -->
+
+    <!--放行,,可以匿名访问就叫放行,,,不需要登录-->
+    <security:http pattern="/css/**" security="none"/>
+    <security:http pattern="/img/**" security="none"/>
+    <security:http pattern="/js/**" security="none"/>
+    <security:http pattern="/plugins/**" security="none"/>
+    <security:http pattern="/login.html" security="none"/>
+
+    <!--url拦截规则配置
+        auto-config: 自动配置，创建登陆页面，自动处理登陆请求，密码匹配.....
+        use-expressions: true: 使用spel表达 hasAnyRole hasAny....
+                         false: 不使用表达式，必须使用ROLE_打头, ROLE_ADMIN，否则启动时会报错
+    -->
+
+    <security:http auto-config="true" use-expressions="true">
+        <!--intercept-url拦截url
+            pattern: 匹配的url格式 /** 所有的请求
+            access: 标定的权限，使用角色名。当use-expressions=true就使用表达式has...
+        -->
+        <!--只要认证通过就可以访问-->
+        <!--
+            isAuthenticated: 是否认证过了，也就是否登陆，登陆了就可以访问
+        -->
+        <security:headers>
+            <!--设置在页面可以通过iframe访问受保护的页面，默认为不允许访问
+            Spring-Security 默认是设置了 “X-Frame-Options” 属性为DENY
+            有三个：
+                DENY — 表示该页面不允许在 frame 中展示，即便是在相同域名的页面中嵌套也不允许。
+                SAMEORIGIN — 表示该页面可以在相同域名页面的 frame 中展示。
+                ALLOW-FROM https://example.com/ — 表示该页面可以在指定来源的 frame 中展示。
+            -->
+            <security:frame-options policy="SAMEORIGIN"/>
+        </security:headers>
+        <!--下面的就是粗颗粒,拦截所有,不登录不可以访问,,细颗粒就是在具体方法上添加注解-->
+        <security:intercept-url pattern="/**"  access="isAuthenticated()" />
+        <!--<security:intercept-url pattern="/a.html"  access="isAuthenticated()" />
+
+        &lt;!&ndash;
+        拥有add权限就可以访问b.html页面
+        hasAuthority： 登陆用户有这个权限
+        &ndash;&gt;
+        <security:intercept-url pattern="/b.html"  access="hasAuthority('add')" />
+
+        &lt;!&ndash;
+        拥有ROLE_ADMIN角色就可以访问c.html页面
+        hasRole: 登陆用户拥有个这角色
+        &ndash;&gt;
+        <security:intercept-url pattern="/c.html"  access="hasRole('ROLE_ADMIN')" />
+
+        &lt;!&ndash;拥有ROLE_ADMIN角色就可以访问d.html页面，
+            注意：此处虽然写的是ADMIN角色，框架会自动加上前缀ROLE_&ndash;&gt;
+        <security:intercept-url pattern="/d.html"  access="hasRole('ADMIN')" />-->
+
+        <!--自定义登陆处理
+            login-page: 登陆页面
+            login-processing-url: 指向处理登陆验证的url或者controller  /login security自带的
+            authentication-failure-url: 认证失败后跳转的地址
+            default-target-url: 如果原来是从其它页面跳转到登陆页面的，登陆成功后会跳转回原来的页面
+                                只有一开始就访问login.html，这时登陆成功就会跳转到default-target-url
+            always-use-default-target: true，不管从哪个页面来请求，登陆成功后都跳转到default-target-url
+            username-parameter: 将来认证获取登陆用户名时去request.getParameter(参数名)
+            password-parameter: 将来认证获取登陆用密码时去request.getParameter(参数名)
+        -->
+        <security:form-login
+                login-page="/login.html"
+                login-processing-url="/login.do"
+                username-parameter="username"
+                password-parameter="password"
+                authentication-failure-url="/login.html"
+                default-target-url="/pages/main.html"
+                always-use-default-target="true"
+        />
+        <!--
+            logout-success-url: 退出成功跳转的页面
+            invalidate-session: 清除session，失效
+            logout-url: 处理退出的请求地址，默认用security /logout
+        -->
+        <security:logout logout-success-url="/login.html" invalidate-session="true" logout-url="/logout.do"/>
+        <!--关闭跨域访问控制-->
+        <security:csrf disabled="true"/>
+    </security:http>
+
+
+    <!--开启全局注解方式权限控制
+       @Before
+       @After
+       @Around
+   -->
+    <security:global-method-security pre-post-annotations="enabled"/>
+    <!--认证管理器-->
+    <security:authentication-manager>
+        <!--认证信息的提供者 user-service-ref 找这个对象 配置这个实现类到核心容器-->
+        <security:authentication-provider user-service-ref="securityUserServiceImpl">
+            <!--使用encoder对应登陆密码对应校验
+                一个是从前端来的密码
+                另一个是从数据库来的 userdetails.user
+            -->
+            <!--指定密码加密策略-->
+            <security:password-encoder ref="bCryptPasswordEncoder"/>
+            <!--定义为内存中写死的用户信息-->
+           <!-- <security:user-service>
+               &lt;!&ndash; <写死，硬编码一个用户信息，将来改为从数据库加载
+                    name: 登陆用户名
+                    password: 登陆密码
+                    authorities: 这个用户所拥有的权限集合，多个以逗号分割，将来改成从数据库加载
+                    {noop}:空操作; 无操作; 就是明文密码。&ndash;&gt;
+
+                <security:user name="admin" password="{noop}admin" authorities="ROLE_ADMIN"/>
+            </security:user-service>-->
+        </security:authentication-provider>
+    </security:authentication-manager>
+    <!--IOC依赖注入实现类到核心容器-->
+    <!--Controller上的service注解加上了@Service(securityUserServiceImpl),这个,就相当于IOC了,就不需要再配置文件中写Bean了
+-->
+    <!--<bean id="securityUserServiceImpl" class="com.IT.liuJia.service.Impl.MyUserServiceImpl"/>-->
+    <!--注册密码加密对象-->
+    <bean id="bCryptPasswordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+    <!--有了Controller就要让他进入容器,来一个包扫描     扫描Controller上的注解-->
+    <context:component-scan base-package="com.IT.liuJia.controller"/>
+</beans>

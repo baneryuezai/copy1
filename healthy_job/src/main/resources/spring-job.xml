@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--干活的类-->
+    <bean id="myJob" class="com.IT.liuJia.job.MyJob"/>
+    <!-- 任务策略类：描述任务执行的策略-->
+    <bean id="jobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <!--真正执行任务的对象-->
+        <property name="targetObject" ref="myJob"/>
+        <!--任务的方法-->
+        <property name="targetMethod" value="doJob"/>
+        <!--并发为ture时： 多线程来执行任务，时间点到了就触发，如果前一个任务没有完成，再启动一个线程去，变成多个线程
+            false: 单线程。时间点到了，就等前一个完成后再来执行。超过一个等待后，其它再来等待的任务就会取消
+        -->
+        <property name="concurrent" value="false"/>
+    </bean>
+
+    <!--触发器 触发任务的执行-->
+    <bean id="trigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <!--触发的时机：CronTrigger(定时定点)定时定点执行, simpleTrigger(延迟多久后执行，每间隔多久后执行)间隔时间来执行 -->
+        <!--cronExpression: 七子：秒 分 时 日 月 周 年 -->
+        <property name="cronExpression" value="0/20 * * * * ?"/>
+        <!--触发后就找job策略类-->
+        <property name="jobDetail" ref="jobDetail"/>
+    </bean>
+
+    <!--总调度容器, 统管trigger与jobdetail-->
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="trigger"></ref>
+            </list>
+        </property>
+    </bean>
+    <import resource="classpath:spring-redis.xml"/>
+</beans>

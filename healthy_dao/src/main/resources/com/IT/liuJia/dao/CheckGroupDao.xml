@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+        <!DOCTYPE mapper
+                PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.IT.liuJia.dao.CheckGroupDao">
+    <!--将表里面的信息添加进去-->
+    <insert id="add" parameterType="CheckGroup">
+        <selectKey keyProperty="id" resultType="int" order="AFTER">
+            SELECT LAST_insert_id()
+        </selectKey>
+        INSERT INTO t_checkgroup(code,name,helpCode,sex,remark,attention)
+        VALUES(#{code},#{name},#{helpCode},#{sex},#{remark},#{attention})
+    </insert>
+    <!--将两个表的关系添加进去-->
+    <insert id="addCheckGroupCheckItem" parameterType="int">
+        INSERT INTO t_checkgroup_checkitem
+        VALUES (#{checkGroupId},#{checkitemId})
+    </insert>
+
+    <!--模糊查询-->
+    <select id="findByCondition" parameterType="String" resultType="CheckGroup">
+        SELECT * FROM t_checkgroup
+        <if test="value!=null and value.length>0">
+            WHERE code LIKE #{VALUE} OR NAME LIKE #{VALUE} OR helpCode LIKE #{VALUE}
+        </if>
+    </select>
+    <!--数据回显        根据项目组id查找项目组-->
+    <select id="findById" parameterType="int" resultType="CheckGroup">
+        SELECT * FROM t_checkgroup
+        <where>
+            id=#{id}
+        </where>
+    </select>
+    <select id="findCheckItemIdsById" parameterType="int" resultType="int">
+        SELECT checkitem_id FROM t_checkgroup_checkitem WHERE checkgroup_id=#{id}
+    </select>
+    <!--查询所有检查组的下拉列表-->
+    <select id="findAll" resultType="CheckGroup">
+        SELECT * FROM t_checkgroup
+    </select>
+    <!--更新新的检查组-->
+    <update id="upData" parameterType="CheckGroup">
+        update t_checkgroup
+        <set>
+            code=#{code},
+            name=#{name},
+            helpCode=#{helpCode},
+            sex=#{sex},
+            remark=#{remark},
+            attention=#{attention}
+        </set>
+        where id=#{id}
+    </update>
+   <!-- <delete id="deleteCheckItemById" parameterType="int">
+        DELETE FROM t_checkgroup_checkitem WHERE checkgroup_id=#{checkgroup_id}
+    </delete>-->
+    <delete id="delete" parameterType="int">
+        DELETE FROM t_package_checkgroup pc,t_checkgroup g,t_checkgroup_checkitem cc
+        WHERE pc.id=g.id AND g.id=cc.id AND g.id=#{id}
+    </delete>
+</mapper>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/healthy_common" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/healthy_dao" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/healthy_interface" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/healthy_job" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/healthy_mobile" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/healthy_pojo" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/healthy_service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/healthy_web" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/springsecurity_demo" charset="UTF-8" />
+  </component>
+</project>

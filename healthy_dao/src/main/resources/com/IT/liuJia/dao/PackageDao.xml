@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.IT.liuJia.dao.PackageDao">
+    <!--添加套餐并且获得主键-->
+    <insert id="add" parameterType="Package">
+       <selectKey keyProperty="id" resultType="int" order="AFTER">
+          SELECT last_insert_id()
+       </selectKey>
+        insert into t_package(name,code,helpCode,sex,age,price,remark,attention,img)
+        values(#{name},#{code},#{helpCode},#{sex},#{age},#{price},#{remark},#{attention},#{img})
+    </insert>
+    <insert id="addPackageCheckGroup" parameterType="int">
+        INSERT INTO t_package_checkgroup values (#{pkgId}, #{checkgroupId})
+    </insert>
+    <!--模糊查询并分页-->
+    <select id="findByCondition" parameterType="String" resultType="Package">
+        SELECT * FROM t_package
+        <if test="value!=null and value.length>0">
+            WHERE code LIKE #{VALUE} OR NAME LIKE #{VALUE} OR helpCode LIKE #{VALUE}
+        </if>
+    </select>
+    <!--查询所有套餐-->
+    <select id="findAll" resultType="Package">
+        SELECT * FROM t_package
+    </select>
+    <!--查询套餐 一对多映射到项目组  项目组一对多映射到检查项-->
+    <select id="findById" parameterType="int" resultMap="packageCheckGroupCheckItemResultMap">
+        SELECT pa.*, -- 代表套餐信息 --
+        pcg.checkgroup_id,cg.name AS checkgroup_name,cg.remark,-- 检查组信息 --
+        cci.checkitem_id,ci.name AS checkitem_name
+        FROM t_checkitem ci,t_checkgroup_checkitem cci,t_checkgroup cg,t_package_checkgroup pcg,t_package pa WHERE pa.id=#{id}
+        AND pa.id=pcg.package_id AND pcg.checkgroup_id=cg.id AND cg.id=cci.checkgroup_id AND ci.id=cci.checkitem_id
+    </select>
+    <resultMap id="packageCheckGroupCheckItemResultMap" type="package">
+        <!--套餐-->
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="code" column="code"/>
+        <result property="helpCode" column="helpCode"/>
+        <result property="sex" column="sex"/>
+        <result property="age" column="age"/>
+        <result property="price" column="price"/>
+        <result property="remark" column="remark"/>
+        <result property="attention" column="attention"/>
+        <result property="img" column="img"/>
+        <!--检查组    property 映射的属性   ofType  映射的类型   javaType   返回的是啥就写啥   column   我将要对应映射的名称-->
+        <!--属性指的是实体类的属性-->
+        <collection property="checkGroups" ofType="CheckGroup" javaType="list">
+            <id property="id" column="checkgroup_id"/>
+            <result property="name" column="checkgroup_name"/>
+            <result property="remark" column="checkgroup_remark"/>
+            <!--检查项-->
+            <collection property="checkItems" ofType="CheckItem" javaType="List">
+            <id property="id" column="checkitem_id"/>
+            <result property="name" column="checkitem_name"/>
+            </collection>
+        </collection>
+    </resultMap>
+    <!--根据id查询套餐-->
+    <select id="findByPkgId" resultType="Package" parameterType="int">
+        SELECT * FROM t_package WHERE id=#{id}
+    </select>
+    <!--套餐约占比-->
+    <select id="getPackageReport" resultType="map">
+        SELECT p.name,count(1) as value
+        FROM t_order o,t_package p
+        WHERE o.package_id=p.id
+        GROUP BY p.name
+    </select>
+</mapper>
