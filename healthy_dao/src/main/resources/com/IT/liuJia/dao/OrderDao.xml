@@ -80,7 +80,7 @@
         <!--热门套餐，查询前5条-->
         <select id="findHotPackage" resultType="map">
                 select p.name, count(o.id) count ,count(o.id)/t.total proportion,p.remark
-                from t_order4 o,t_package p,(select count(id) total from t_order4) t
+                from t_order o,t_package p,(select count(id) total from t_order) t
                 where p.id = o.package_id
                 group by o.package_id
                 order by proportion desc limit 0,4

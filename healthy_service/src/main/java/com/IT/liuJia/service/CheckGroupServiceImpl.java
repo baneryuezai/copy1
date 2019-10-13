@@ -1,8 +1,10 @@
 package com.IT.liuJia.service;
 
+import com.IT.liuJia.constant.MessageConstant;
 import com.IT.liuJia.dao.CheckGroupDao;
 import com.IT.liuJia.entity.PageResult;
 import com.IT.liuJia.entity.QueryPageBean;
+import com.IT.liuJia.exception.MyException;
 import com.IT.liuJia.pojo.CheckGroup;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
@@ -105,9 +107,23 @@ public class CheckGroupServiceImpl implements CheckGroupService {
 
         }
     }
-
+    /*
+    * 删除检查组
+    * 先要判断有没有被套餐引用,若被引用,则不能删
+    * */
     @Override
-    public void delete(int id) {
-        checkGroupDao.delete(id);
+    public void delete(int id) throws MyException{
+
+        int count=checkGroupDao.findCountByCheckGroupId(id);
+        if (count>0) {
+//            被引用,不可以删除
+            throw new MyException(MessageConstant.DELETE_CHECKGROUP_FALL_USERD);
+        }else{
+//            可以删除
+//            checkGroupDao.delete(id);
+        checkGroupDao.deleteRelation(id);
+        checkGroupDao.deleteGroup(id);
+        }
+
     }
 }

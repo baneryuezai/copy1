@@ -329,11 +329,6 @@
                     if (res.data.flag) {
                         this.dialogFormVisible = false;
                         this.findPage();
-                    } else {
-                        this.$message({
-                            message: res.data.message,
-                            type: 'error'
-                        });
                     }
                 })
             },
@@ -357,7 +352,7 @@
                 //    res=res.data  Element帮我们处理了data
                 this.$message({
                     message: res.message,
-                    type: res.data.flag ? 'success' : 'error'
+                    type: res.flag ? 'success' : 'error'
                 });
                 //    判断 是否成功
                 if (res.flag) {

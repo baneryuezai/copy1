@@ -6,6 +6,7 @@ package com.IT.liuJia.constant;
 public interface MessageConstant {
     static final String DELETE_CHECKITEM_FAIL = "删除检查项失败";
     static final String DELETE_CHECKITEM_FAIL_USED = "删除检查项已经被使用了";
+    static final String DELETE_CHECKGROUP_FALL_USERD="删除检查组已经被使用了";
     static final String DELETE_CHECKITEM_SUCCESS = "删除检查项成功";
     static final String ADD_CHECKITEM_SUCCESS = "新增检查项成功";
     static final String ADD_CHECKITEM_FAIL = "新增检查项失败";

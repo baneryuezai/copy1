@@ -56,7 +56,7 @@ public class ValidateCodeController {
         }
 
     }
-    @PostMapping("/send4OLogin")
+    @PostMapping("/send4Login")
     public Result send4Login(@RequestParam String telephone) {
 //        获取redis操作对象,用完了要关闭
         Jedis jedis = jedisPool.getResource();

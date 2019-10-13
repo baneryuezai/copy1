@@ -1,5 +1,6 @@
 package com.IT.liuJia.controller;
 import com.IT.liuJia.entity.Result;
+import com.IT.liuJia.exception.MyException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -18,6 +19,13 @@ import java.util.List;
 * */
 @RestControllerAdvice
 public class MyExceptionHandler {
+    //声明要捕获的异常
+    @ExceptionHandler(MyException.class)
+    public Result handleMyException(MyException my){
+        my.printStackTrace();//stack:栈  trace:追踪
+//        包装一下返回的结果
+        return new Result(false,my.getLocalizedMessage());
+    }
         //    声明要捕获的异常类型
     @ExceptionHandler(AccessDeniedException.class)
     public Result noAccessHandler(AccessDeniedException accessDeniedException){

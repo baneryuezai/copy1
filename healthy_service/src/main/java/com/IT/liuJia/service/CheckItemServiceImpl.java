@@ -1,15 +1,15 @@
 package com.IT.liuJia.service;
-
+import com.IT.liuJia.constant.MessageConstant;
 import com.IT.liuJia.dao.CheckItemDao;
 import com.IT.liuJia.entity.PageResult;
 import com.IT.liuJia.entity.QueryPageBean;
+import com.IT.liuJia.exception.MyException;
 import com.IT.liuJia.pojo.CheckItem;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.List;
 
 /**
@@ -55,17 +55,12 @@ public class CheckItemServiceImpl implements CheckItemService {
      *
      * */
     @Override
-    public void delete(int id) {
+    public void delete(int id) throws MyException{
 //        先检查一下,看检查项是否被检查组引用了
-        int count = 0;
-        try {
-            count = checkItemDao.findCountByCheckItemId(id);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        int count = checkItemDao.findCountByCheckItemId(id);
         if (count > 0) {
 //            有引用,不许删除
-
+            throw new MyException(MessageConstant.DELETE_CHECKITEM_FAIL_USED);
         } else {
 //            可以删除
             checkItemDao.delete(id);

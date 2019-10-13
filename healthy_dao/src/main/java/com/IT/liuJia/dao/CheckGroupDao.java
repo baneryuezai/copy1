@@ -47,5 +47,12 @@ public interface CheckGroupDao {
     * */
     void deleteCheckItemById(Integer checkGroupId);
 
+
+    int findCountByCheckGroupId(int id);
+
+    void deleteRelation(int id);
+
+    void deleteGroup(int id);
+
     void delete(int id);
 }

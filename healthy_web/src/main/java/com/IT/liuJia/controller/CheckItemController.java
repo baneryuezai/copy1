@@ -1,5 +1,4 @@
 package com.IT.liuJia.controller;
-
 import com.IT.liuJia.constant.MessageConstant;
 import com.IT.liuJia.entity.PageResult;
 import com.IT.liuJia.entity.QueryPageBean;
@@ -9,9 +8,7 @@ import com.IT.liuJia.service.CheckItemService;
 import com.alibaba.dubbo.config.annotation.Reference;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-
 /**
  * 包名: com.IT.liuJia.controller
  * 作者: JiaLiu
@@ -22,7 +19,6 @@ import java.util.List;
 public class CheckItemController {
     @Reference
     private CheckItemService checkItemService;
-
     /*
      * 添加
      *

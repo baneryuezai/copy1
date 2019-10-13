@@ -51,11 +51,24 @@
         </set>
         where id=#{id}
     </update>
-   <!-- <delete id="deleteCheckItemById" parameterType="int">
+    <!--更新检查组删除原有关系-->
+    <delete id="deleteCheckItemById" parameterType="int">
         DELETE FROM t_checkgroup_checkitem WHERE checkgroup_id=#{checkgroup_id}
+    </delete>
+    <!--删除检查组时判断关系的关系表-->
+    <select id="findCountByCheckGroupId" parameterType="int" resultType="int">
+        SELECT COUNT(1) FROM t_package_checkgroup WHERE checkgroup_id=#{id}
+    </select>
+    <!--<delete id="delete" parameterType="int">
+        DELETE FROM t_checkgroup_checkitem cc,t_checkgroup g
+        WHERE g.id=cc.id AND g.id=#{id}
     </delete>-->
-    <delete id="delete" parameterType="int">
-        DELETE FROM t_package_checkgroup pc,t_checkgroup g,t_checkgroup_checkitem cc
-        WHERE pc.id=g.id AND g.id=cc.id AND g.id=#{id}
+    <!--删除关系表-->
+    <delete id="deleteRelation" parameterType="int">
+        DELETE FROM t_checkgroup_checkitem WHERE checkgroup_id=#{id}
+    </delete>
+    <!--删除数据表-->
+    <delete id="deleteGroup" parameterType="int">
+        DELETE FROM t_checkgroup WHERE id=#{id}
     </delete>
 </mapper>

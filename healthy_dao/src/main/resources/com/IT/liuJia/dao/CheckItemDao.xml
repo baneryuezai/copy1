@@ -13,6 +13,7 @@
             WHERE code like #{VALUE} OR NAME LIKE #{VALUE}
         </if>
     </select>
+    <!--查询检查组有没有被引用-->
     <select id="findCountByCheckItemId" parameterType="int" resultType="int">
         SELECT COUNT(1) FROM t_checkgroup_checkitem
         <where>

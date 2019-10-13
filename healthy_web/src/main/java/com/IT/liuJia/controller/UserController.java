@@ -28,6 +28,5 @@ public class UserController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         System.out.println(user.getUsername());
         return new Result(true, MessageConstant.GET_USERNAME_SUCCESS, username);
-
     }
 }
